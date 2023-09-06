@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -46,7 +47,7 @@
             }
 
             header h2 {
-                font-size: calc(0.7rem + 1.75vw);
+                font-size: calc(1rem + 1.75vw);
                 line-height: 1.3;
                 text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
             }
@@ -66,20 +67,24 @@
                 box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
             }
 
+            section article.in {
+                color: rgb(255, 0, 255);
+            }
+
             section article.cl {
-                color: rgba(255, 255, 255, 0.9);
-            }
-
-            section article.hw {
-                color: rgba(255, 255, 255, 0.9);
-            }
-
-            section article.jp {
-                color: rgba(255, 255, 255, 0.9);
+                color: rgb(255, 0, 0);
             }
 
             section article.mx {
-                color: rgba(255, 255, 255, 0.9);
+                color: rgb(0, 255, 0);
+            }
+
+            section article.jp {
+                color: rgb(0, 255, 255);
+            }
+
+            section article.ind {
+                color: rgb(255, 255, 0);
             }
 
             section article h3 {
@@ -88,8 +93,8 @@
             }
 
             section article p {
-                font-size: 0.8rem;
-                padding: 0.3rem 0;
+                font-size: 1rem;
+                padding: 0.5rem 0;
             }
 
             @media (max-width: 767.98px) {
@@ -127,7 +132,7 @@
         <div class="container">
             <header>
                 <h1>Terremotos no tan aesthetic</h1>
-                <h2>En los últimos 30 días. Actualizado a cada minuto.</h2>
+                <h2>Últimos 7 días. Actualizado cada minuto</h2>
             </header>
             <main>
                 <section></section>
@@ -138,10 +143,11 @@
         </div>
         <select name="select" id="opciones">
             <option>All</option>
+            <option value="Indonesia">Indonesia</option>
             <option value="Chile">Chile</option>
-            <option value="Hawaii">Hawaii</option>
-            <option value="Japan">Japan</option>
             <option value="Mexico">Mexico</option>
+            <option value="Japan">Japan</option>
+            <option value="India">India</option>
         </select>
         <!--Primero vamos a buscar la versión más reciente de jQuery-->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -159,12 +165,12 @@
                     data.features.forEach(function (t, i) {
                         var articuloTipo;
                         //par de alternativas para la variable articuloTipo
-                        if (t.properties.place.includes("Chile")) { articuloTipo = '<article class="cl">'; } 
-                        else if (t.properties.place.includes("Hawaii")) { articuloTipo = '<article class="hw">'; } 
-                        else if (t.properties.place.includes("Japan")) { articuloTipo = '<article class="jp">'; } e
-                        else if (t.properties.place.includes("Mexico")) { articuloTipo = '<article class="mx">'; } 
-                        else { articuloTipo = '<article class="etc">';}
-                        
+                        if (t.properties.place.includes("Indonesia")) { articuloTipo = '<article class="in">'; 
+                        } else if (t.properties.place.includes("Chile")) { articuloTipo = '<article class="cl">';
+                        } else if (t.properties.place.includes("Mexico")) { articuloTipo = '<article class="mx">';
+                        } else if (t.properties.place.includes("Japan")) { articuloTipo = '<article class="jp">'; 
+                        }else if (t.properties.place.includes("India")) { articuloTipo = '<article class="ind">';
+                        } else { articuloTipo = '<article class="etc">';}
                         //aplicación del articuloTipo y la pequeña función
                         $("section").append(`${articuloTipo}<h3>${t.properties.mag.toFixed(1)}</h3><p>${t.properties.place}</p><p><a href="${t.properties.url}" target="_blank" rel="noopener noreferrer">${registro(t.properties.time)}</a></p></article>`);
                     });
@@ -172,26 +178,24 @@
                     var valor;
                     $("#opciones").change(function () {
                         valor = $("select").val();
-                        if (valor == "Chile") {
+                        if (valor == "Indonesia") {
+                            $(".etc, .cl, .mx, .jp, .ind").hide();
+                            $(".in").show();
+                        }else if (valor == "Chile") {
+                            $(".etc, .in, .mx, .jp, .ind").hide();
                             $(".cl").show();
-                            $(".etc, .hw, .jp, .mx").hide();
-                        } 
-                        else if (valor == "Hawaii") {
-                            $(".hw").show();
-                            $(".etc, .cl, .jp, .mx").hide();
-                        }
-                         else if (valor == "Japan") {
-                            $(".jp").show();
-                            $(".etc, .cl, .hw, .mx").hide();
-                        }
-                        else if (valor == "Mexico") {
+                        }else if (valor == "Mexico") {
+                            $(".etc, .in, .cl, .jp, .ind").hide();
                             $(".mx").show();
-                            $(".etc, .cl, .hw, .jp").hide();
+                        }else if (valor == "Japan") {
+                            $(".etc, .in, .cl, .mx, .ind").hide();
+                            $(".jp").show();
+                        }else if (valor == "India") {
+                            $(".etc, .in, .cl, .mx, .jp").hide();
+                            $(".ind").show();
+                        }else {
+                            $(".etc, .in, .cl, .mx, .jp, .ind").show();
                         }
-                        else {
-                            $(".etc, .cl, .hw, .jp, .mx").show();
-                        }
-
                     });
                 }); // cierro $.getJSON((){});
             }); //cierro $(function(){});
